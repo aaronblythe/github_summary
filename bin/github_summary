@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+#TODO: Look into a cleaner way to do this
+$:.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
+require 'optparse'
+require 'github_summary'
+require 'github_summary/cli'
+require 'github_summary/collection'
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: retrieve a summary of a github repository"
+
+  options[:api_url] = nil
+  opts.on('-g', '--github_api_url URL', 'github instance, default is https://api.github.com/') do |g|
+    options[:api_url] = g
+  end
+
+  options[:org_name] = nil
+  opts.on('-o', '--org ORG', 'github organization, default is rails') do |o|
+    options[:org_name] = o
+  end
+
+  options[:project_name] = nil
+  opts.on('-p', '--project PROJECT', 'github project, default is rails') do |p|
+    options[:project_name] = p
+  end
+
+  opts.on("-t", "--test", "Rick Rolled - https://www.youtube.com/watch?v=kfVsfOSbJY0") do |file|
+    options[:test] = "pownd"
+  end
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+cli = GithubSummary::Cli.new(options)
+cli.run()
